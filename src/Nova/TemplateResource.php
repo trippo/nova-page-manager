@@ -43,10 +43,10 @@ abstract class TemplateResource extends Resource
         $handleField = function (&$field) {
             if (!empty($field->attribute) && ($field->attribute !== 'ComputedField')) {
                 if (empty($field->panel)) {
-                    $field->attribute = 'data->' . $field->attribute;
+                    $field->attribute = 'data';
                 } else {
                     $sanitizedPanel = nova_page_manager_sanitize_panel_name($field->panel);
-                    $field->attribute = 'data->' . $sanitizedPanel . '->' . $field->attribute;
+                    $field->attribute = 'data->' . $sanitizedPanel ;
                 }
             } else {
                 if ($field instanceof \Laravel\Nova\Fields\Heading) {
