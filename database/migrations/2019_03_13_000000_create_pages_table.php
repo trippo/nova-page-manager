@@ -26,14 +26,17 @@ class CreatePageManagerTables extends Migration
                 $table->text('seo_description')->nullable();
                 $table->text('seo_image')->nullable();
                 $table->foreignId('locale_parent_id')
+                    ->nullable()
                     ->constrained(NovaPageManager::getPagesTableName())
                     ->onUpdate('cascade')
                     ->onDelete('set null');
                 $table->foreignId('parent_id')
+                    ->nullable()
                     ->constrained(NovaPageManager::getPagesTableName())
                     ->onUpdate('cascade')
                     ->onDelete('set null');
                 $table->foreignId('draft_parent_id')
+                    ->nullable()
                     ->constrained(NovaPageManager::getPagesTableName())
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
