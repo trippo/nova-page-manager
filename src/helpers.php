@@ -218,9 +218,9 @@ if (!function_exists('nova_get_page_by_slug')) {
             })
             ->orWhere(DB::raw("REPLACE(CONCAT(locale, '/', slug), '//', '/')"), $slug)
             ->orWhere(DB::raw("REPLACE(CONCAT(locale, '/', slug), '//', '/')"), $slug . '/')
-            ->firstOrFail();
+            ->first();
 
-        if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
+        if (empty($page) || (isset($page->preview_token) && $page->preview_token !== $previewToken)) {
             return null;
         }
 
@@ -347,6 +347,7 @@ if (!function_exists('nova_resolve_fields_data')) {
 if (!function_exists('nova_page_manager_sanitize_panel_name')) {
     function nova_page_manager_sanitize_panel_name($name)
     {
+        $name = \Illuminate\Support\Str::slug($name);
         $removedSpecialChars = preg_replace("/[^A-Za-z0-9 ]/", '', $name);
         $snakeCase = preg_replace("/\s+/", '_', $removedSpecialChars);
         return strtolower($snakeCase);
@@ -365,6 +366,8 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
         if (empty($slugs)) $slugs = ['/'];
 
         $parent = nova_get_page_by_slug($slugs[0], $previewToken);
+        if (empty($parent)) return null;
+
         $isParent = $parent['parent_id'] == null;
         while (!$isParent) {
             $parent = nova_get_page($parent['parent_id']);
