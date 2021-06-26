@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 
-class CreateRegionAndPagesTables extends Migration
+class CreateRegionsTables extends Migration
 {
     /**
      * Run the migrations.

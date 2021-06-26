@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 
-class CreatePageManagerTables extends Migration
+class CreatePagesTables extends Migration
 {
     /**
      * Run the migrations.
