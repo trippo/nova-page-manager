@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class CreatePageManagerTables extends Migration
 {
@@ -13,24 +14,43 @@ class CreatePageManagerTables extends Migration
      */
     public function up()
     {
-        $table = config('nova-page-manager.table', 'nova_page_manager');
-
-        Schema::create($table, function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
-            $table->enum('type', ['page', 'region']);
-            $table->string('name');
-            $table->string('slug')->default('')->unique('nova_page_manager_slug_unique');
-            $table->string('locale');
-            $table->string('template');
-            $table->string('seo_title')->nullable();
-            $table->string('seo_description')->nullable();
-            $table->string('seo_image')->nullable();
-            $table->bigInteger('parent_id')->nullable();
-            $table->json('data')->nullable();
-
-            $table->unique(['parent_id', 'locale'], 'nova_page_manager_parent_id_locale_unique');
-        });
+        Schema::create(
+            NovaPageManager::getPagesTableName(),
+            function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('name');
+                $table->string('slug')->default('');
+                $table->string('locale', 5);
+                $table->string('template');
+                $table->string('seo_title')->nullable();
+                $table->text('seo_description')->nullable();
+                $table->text('seo_image')->nullable();
+                $table->foreignId('locale_parent_id')
+                    ->constrained(NovaPageManager::getPagesTableName())
+                    ->onUpdate('cascade')
+                    ->onDelete('set null');
+                $table->foreignId('parent_id')
+                    ->constrained(NovaPageManager::getPagesTableName())
+                    ->onUpdate('cascade')
+                    ->onDelete('set null');
+                $table->foreignId('draft_parent_id')
+                    ->constrained(NovaPageManager::getPagesTableName())
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+                $table->string('preview_token')->nullable();
+                $table->boolean('published')->default(true);
+                $table->json('data')->nullable();
+                $table->timestamps();
+                $table->unique(
+                    ['locale_parent_id', 'locale', 'published'],
+                    NovaPageManager::getPagesTableName() . '_locale_parent_id_locale_published_unique'
+                );
+                $table->unique(
+                    ['locale', 'slug', 'published', 'parent_id'],
+                    NovaPageManager::getPagesTableName() . '_locale_slug_published_parent_id_unique'
+                );
+            }
+        );
     }
 
     /**
@@ -40,8 +60,6 @@ class CreatePageManagerTables extends Migration
      */
     public function down()
     {
-        $table = config('nova-page-manager.table', 'nova_page_manager');
-
-        Schema::dropIfExists($table);
+        Schema::dropIfExists(NovaPageManager::getPagesTableName());
     }
 }
