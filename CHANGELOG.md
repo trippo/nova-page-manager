@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.5] - 2021-12-14
+
+### Fixed
+
+- Fixed an issue with `nova_page_manager_get_page_by_template` where it would return a page that was not locale parent.
+
+## [4.0.4] - 2021-12-14
+
+### Fixed
+
+- Fixed panel name breaking change introduced in 4.0.2 (thanks to [@allantatter](https://github.com/allantatter)))
+
+## [4.0.3] - 2021-12-13
+
+### Added
+
+- Added `created_at` and `updated_at` to `nova_get_page()`
+
+### Changed
+
+- Fixed abnormal amount of queries in page manager index view (thanks to [@allantatter](https://github.com/allantatter)))
+- Updated packages
+
+## [4.0.2] - 2021-10-29
+
+### Changed
+
+- Fixed transliteration of panel names
+- Updated packages
+
+## [4.0.1] - 2021-09-02
+
+### Changed
+
+- Return null instead of an exception when a parent can no longer be found (thanks to [@shahruslan](https://github.com/shahruslan)))
+- Updated packages
+
 ## [4.0.0] - 2021-06-18
 
 ### Added
